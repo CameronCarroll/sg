@@ -8,13 +8,10 @@ class MenuState < GameState
 
   def initialize
     @needs_redraw = true
-    @title = Gosu::Image.from_text(
-      $window, "Galactic Strategy",
-      Gosu.default_font_name, 100)
-    @login = Gosu::Image.from_text(
-      $window, "Login Username:", Gosu.default_font_name, 30)
-    @login_pass = Gosu::Image.from_text(
-      $window, "Login Password:", Gosu.default_font_name, 30)
+    @objects = []
+    @objects << Label.new("Galactic Strategy", v_offset: -100, lineheight: 100)
+    @objects << Label.new("Login Username:", h_offset: -200, v_offset: 100)
+    @objects << Label.new("Login Password:", h_offset: -200, v_offset: 200)
     @textinput_login = Gosu::TextInput.new
     @textinput_password = Gosu::TextInput.new
   end
@@ -38,29 +35,12 @@ class MenuState < GameState
     x = $window.mouse_x
     y = $window.mouse_y
     $window.caption = Gosu.fps
-    text = "Mouse Coords: #{x},#{y}"
-    @coord_info = Gosu::Image.from_text(
-      $window, text, Gosu.default_font_name, 30)
-
   end
 
   def draw
-    @title.draw(
-      $window.width / 2 - @title.width / 2,
-      $window.height / 2 - @title.height / 2 - 100,
-      10)
-    @coord_info.draw(
-      $window.width / 2 - @coord_info.width / 2,
-      $window.height / 2 - @coord_info.height / 2 + 100,
-      10)
-    @login.draw(
-      $window.width / 2 - @login.width / 2 - 150,
-      $window.height / 2 - @login.height / 2 + 250,
-      10)
-    @login_pass.draw(
-      $window.width / 2 - @login_pass.width / 2 - 150,
-      $window.height / 2 - @login_pass.height / 2 + 350,
-      10)
+    @objects.each do |obj|
+      obj.draw
+    end
     @last_draw_time = Gosu.milliseconds
   end
 
