@@ -1,13 +1,22 @@
 require 'singleton'
 
+DRAW_DELAY = 1000 # ms to wait between menu draws while idling.
+
 class MenuState < GameState
   include Singleton
   attr_accessor :play_state
 
   def initialize
-    @message = Gosu::Image.from_text(
+    @needs_redraw = true
+    @title = Gosu::Image.from_text(
       $window, "Galactic Strategy",
       Gosu.default_font_name, 100)
+    @login = Gosu::Image.from_text(
+      $window, "Login Username:", Gosu.default_font_name, 30)
+    @login_pass = Gosu::Image.from_text(
+      $window, "Login Password:", Gosu.default_font_name, 30)
+    @textinput_login = Gosu::TextInput.new
+    @textinput_password = Gosu::TextInput.new
   end
 
   def enter
@@ -26,23 +35,47 @@ class MenuState < GameState
   end
 
   def update
-    text = "We need some buttons here for login/options/exit"
-    @info = Gosu::Image.from_text(
+    x = $window.mouse_x
+    y = $window.mouse_y
+    $window.caption = Gosu.fps
+    text = "Mouse Coords: #{x},#{y}"
+    @coord_info = Gosu::Image.from_text(
       $window, text, Gosu.default_font_name, 30)
+
   end
 
   def draw
-    @message.draw(
-      $window.width / 2 - @message.width / 2,
-      $window.height / 2 - @message.height / 2,
+    @title.draw(
+      $window.width / 2 - @title.width / 2,
+      $window.height / 2 - @title.height / 2 - 100,
       10)
-    @info.draw(
-      $window.width / 2 - @info.width / 2,
-      $window.height / 2 - @info.height / 2 + 200,
+    @coord_info.draw(
+      $window.width / 2 - @coord_info.width / 2,
+      $window.height / 2 - @coord_info.height / 2 + 100,
       10)
+    @login.draw(
+      $window.width / 2 - @login.width / 2 - 150,
+      $window.height / 2 - @login.height / 2 + 250,
+      10)
+    @login_pass.draw(
+      $window.width / 2 - @login_pass.width / 2 - 150,
+      $window.height / 2 - @login_pass.height / 2 + 350,
+      10)
+    @last_draw_time = Gosu.milliseconds
   end
+
+  def needs_redraw?
+    @last_draw_time ||= Gosu.milliseconds
+    if (Gosu.milliseconds - @last_draw_time) < DRAW_DELAY
+      true
+    else
+      false
+    end
+  end
+
 
   def button_down(id)
     $window.close if id == Gosu::KbQ
   end
+
 end
