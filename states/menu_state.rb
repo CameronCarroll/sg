@@ -12,6 +12,8 @@ class MenuState < GameState
     @objects << Label.new("Galactic Strategy", v_offset: -100, lineheight: 100)
     @objects << Label.new("Login Username:", h_offset: -200, v_offset: 100)
     @objects << Label.new("Login Password:", h_offset: -200, v_offset: 200)
+    @objects << TextBox.new(35, 275, h_offset: 30, v_offset: 100)
+    @objects << TextBox.new(35, 275, h_offset: 30, v_offset: 200)
     @textinput_login = Gosu::TextInput.new
     @textinput_password = Gosu::TextInput.new
   end
@@ -32,8 +34,9 @@ class MenuState < GameState
   end
 
   def update
-    x = $window.mouse_x
-    y = $window.mouse_y
+    @objects.each do |obj|
+      obj.update
+    end
     $window.caption = Gosu.fps
   end
 
