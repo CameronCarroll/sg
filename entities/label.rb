@@ -16,17 +16,17 @@ class Label
   end
 
   def draw
-    @image.draw(center_horizontal + @h_offset,
-     center_vertical + @v_offset, 10)
+    @image.draw(center_h + @h_offset,
+     center_v + @v_offset, 10)
   end
 
   private
 
-  def center_horizontal
+  def center_h
     $window.width / 2 - @image.width / 2
   end
 
-  def center_vertical
+  def center_v
     $window.height / 2 - @image.height / 2
   end
 end
